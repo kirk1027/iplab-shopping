@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif; /* 全体のフォントを設定 */
+}
+  
+#product-list {
+    display: flex; /* 商品を横並びに表示 */
+    flex-wrap: wrap; /* 商品が多い場合は折り返す */
+    gap: 20px; /* 商品間の間隔を設定 */
+    padding: 20px; /* 全体の余白を設定 */
+}
+  
+.product {
+    border: 1px solid #ddd; /* 商品枠のデザイン */
+    padding: 10px; /* 商品枠の内側の余白 */
+    width: 200px; /* 商品の幅を固定 */
+    text-align: center; /* 中央揃えに設定 */
+}
+  
+.hidden {
+    display: none; /* 非表示状態を設定 */
+}
+  
+.purchase-popup {
+    position: fixed; /* ポップアップを画面に固定 */
+    bottom: 80px; /* 画面下部からの距離 */
+    right: 20px; /* 画面右からの距離 */
+    background: white; /* 背景色を白に設定 */
+    border: 1px solid #ddd; /* 枠線を設定 */
+    padding: 10px; /* 内側の余白 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ポップアップに影を追加 */
+}
+  
+#fixed-checkout-button {
+    position: fixed; /* 常に画面右下に表示 */
+    bottom: 20px; /* 画面下部からの距離 */
+    right: 20px; /* 画面右からの距離 */
+    background-color: #4CAF50; /* ボタンの背景色 */
+    color: white; /* ボタンの文字色 */
+    border: none; /* ボタンの枠線をなくす */
+    padding: 10px 20px; /* ボタンの余白 */
+    font-size: 16px; /* フォントサイズ */
+    cursor: pointer; /* ホバー時にポインターを表示 */
+    border-radius: 5px; /* ボタンの角を丸くする */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ボタンに影を追加 */
+}
+  
+#fixed-checkout-button:hover {
+    background-color: #45a049; /* ホバー時の背景色 */
+}
+
+footer {
+    text-align: center; /* 中央揃え */
+    margin-top: 20px; /* 上の要素との間隔 */
+}
+  
+footer a {
+    color: #007BFF; /* リンクの色 */
+    text-decoration: none; /* 下線をなくす */
+    font-size: 18px; /* フォントサイズ */
+}
+  
+footer a:hover {
+    text-decoration: underline; /* ホバー時に下線を表示 */
+}
+
+table {
+    width: 100%; /* テーブル幅を100%に設定 */
+    border-collapse: collapse; /* 枠線をまとめる */
+    margin-top: 20px; /* 上部に余白を追加 */
+}
+  
+table th, table td {
+    border: 1px solid #ddd; /* セルの枠線を追加 */
+    padding: 8px; /* セル内の余白 */
+    text-align: left; /* 左揃え */
+}
+  
+table th {
+    background-color: #f2f2f2; /* ヘッダーの背景色 */
+    font-weight: bold; /* ヘッダーの太字 */
+}
+
