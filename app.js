@@ -45,8 +45,6 @@ app.post('/api/purchase', (req, res) => {
   }
 });
 
-console.log(`Visit the application at http://localhost:${PORT} (or the Render-provided URL)`);
-
 // 以下，売り上げ関連
 // 売り上げデータページのHTMLを返す
 app.get('/sales', (req, res) => {
@@ -74,6 +72,11 @@ app.get('/api/sales-data', (req, res) => {
   res.json({ totalSales, salesData });
 });
 
+// PORTの定義を最初に行う
+const PORT = process.env.PORT || 3000;
+
 // サーバーを起動
-const PORT = process.env.PORT || 3000; // Render環境ではPORTを環境変数から取得
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Visit the application at http://localhost:${PORT} (or the Render-provided URL)`);
+});
