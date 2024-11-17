@@ -101,6 +101,7 @@ document.getElementById('checkout-button').addEventListener('click', () => {
     cart = []; // カートを空にする
     updateCartPopup(); // ポップアップをリセット
     document.getElementById('popup').classList.add('hidden'); // ポップアップを閉じる
+    fetchProducts();
 });
   
 // 初回実行時に商品データを取得して表示
