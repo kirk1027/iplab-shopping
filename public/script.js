@@ -90,14 +90,17 @@ document.getElementById('checkout-button').addEventListener('click', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: item.name, quantity: item.quantity, price: item.price })
-      });
+      }).then(res => {
+        if (!res.ok) {
+          return res.json().then(data => alert(data.message || 'エラーが発生しました'));
+        }
+      }).catch(err => alert('エラーが発生しました: ' + err.message));
     });
   
     alert('精算が完了しました！');
     cart = []; // カートを空にする
     updateCartPopup(); // ポップアップをリセット
     document.getElementById('popup').classList.add('hidden'); // ポップアップを閉じる
+    // 商品データを更新
+    fetchProducts();
 });
-  
-// 初回実行時に商品データを取得して表示
-fetchProducts();

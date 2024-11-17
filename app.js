@@ -64,6 +64,18 @@ app.post('/api/record-sale', (req, res) => {
   salesData.push({ name, quantity, price });
   totalSales += saleAmount;
 
+  // 在庫を更新
+  const product = products.find(p => p.name === name); // 名前で商品を検索
+  if (product) {
+    if (product.stock >= quantity) {
+      product.stock -= quantity; // 在庫を減らす
+    } else {
+      return res.status(400).json({ success: false, message: '在庫が足りません！' });
+    }
+  } else {
+    return res.status(404).json({ success: false, message: '商品が見つかりません！' });
+  }
+
   res.json({ success: true, totalSales });
 });
 
