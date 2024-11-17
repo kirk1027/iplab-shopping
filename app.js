@@ -7,17 +7,17 @@ app.use(bodyParser.json()); // JSON形式のリクエストボディを解析
 
 // 商品データ（名前、価格、在庫、画像パス）を定義
 let products = [
-  { id: 1, name: 'Product A', price: 1000, stock: 10, image: '/images/product-a.jpg' },
-  { id: 2, name: 'Product B', price: 2000, stock: 5, image: '/images/product-b.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: '/images/product-c.jpg' },
+  { id: 1, name: 'Product A', price: 1000, stock: 10, image: 'images/product-a.jpg' },
+  { id: 2, name: 'Product B', price: 2000, stock: 5, image: 'images/product-b.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
+  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
 ];
 
 // メインページのHTMLを返す（`views/index.html`が表示される）
@@ -44,6 +44,8 @@ app.post('/api/purchase', (req, res) => {
     res.json({ success: false, message: 'Not enough stock!' });
   }
 });
+
+console.log(`Visit the application at http://localhost:${PORT} (or the Render-provided URL)`);
 
 // 以下，売り上げ関連
 // 売り上げデータページのHTMLを返す
@@ -72,6 +74,6 @@ app.get('/api/sales-data', (req, res) => {
   res.json({ totalSales, salesData });
 });
 
-// サーバーを起動（http://localhost:3000でアクセス可能）
-app.listen(3000, '172.16.0.60', () => console.log('Server running on http://172.16.0.60:3000'));
-
+// サーバーを起動
+const PORT = process.env.PORT || 3000; // Render環境ではPORTを環境変数から取得
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
