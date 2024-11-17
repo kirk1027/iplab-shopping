@@ -6,8 +6,11 @@ async function fetchProducts() {
   const res = await fetch('/api/products'); // サーバーから商品データを取得
   const products = await res.json(); // JSON形式でデータを取得
 
-  const productList = document.getElementById('product-list'); // 商品リストの表示エリアを取得
-  productList.innerHTML = ''; // 表示をリセット
+  const drinkList = document.getElementById('drink-list'); // ドリンクリストの表示エリア
+  const snackList = document.getElementById('snack-list'); // スナックリストの表示エリア
+
+  drinkList.innerHTML = ''; // ドリンクリストをリセット
+  snackList.innerHTML = ''; // スナックリストをリセット
 
   // 商品ごとにHTML要素を作成
   products.forEach(product => {
@@ -23,7 +26,12 @@ async function fetchProducts() {
       </select>
       <button onclick="addToCart(${product.id}, '${product.name}', ${product.price})">カートに入れる</button> <!-- カートに入れるボタン -->
     `;
-    productList.appendChild(productDiv); // 商品をリストに追加
+    // ジャンルごとにリストに追加
+    if (product.genre === 'drink') {
+        drinkList.appendChild(productDiv);
+    } else if (product.genre === 'snack') {
+        snackList.appendChild(productDiv);
+    }
   });
 }
 

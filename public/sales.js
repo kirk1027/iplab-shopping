@@ -25,6 +25,7 @@ async function fetchSalesData() {
     const salesTable = document.getElementById('sales-table');
     salesTable.innerHTML = '<tr><th>商品名</th><th>購入個数</th></tr>'; // ヘッダーを作成
     salesData.forEach(sale => {
+        const row = document.createElement('tr');
         row.innerHTML = `<td>${sale.name}</td><td>${sale.quantity}</td>`;
       salesTable.appendChild(row);
     });

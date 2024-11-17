@@ -7,18 +7,16 @@ app.use(bodyParser.json()); // JSON形式のリクエストボディを解析
 
 // 商品データ（名前、価格、在庫、画像パス）を定義
 let products = [
-  { id: 1, name: 'Product A', price: 1000, stock: 10, image: 'images/product-a.jpg' },
-  { id: 2, name: 'Product B', price: 2000, stock: 5, image: 'images/product-b.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-  { id: 3, name: 'Product C', price: 1500, stock: 8, image: 'images/product-c.jpg' },
-];
+    { id: 1, name: 'Cola', price: 100, stock: 10, genre: 'drink', image: 'images/cola.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 2, name: 'Water', price: 50, stock: 20, genre: 'drink', image: 'images/water.jpg' },
+    { id: 3, name: 'Chips', price: 150, stock: 15, genre: 'snack', image: 'images/chips.jpg' },
+    { id: 4, name: 'Chocolate', price: 200, stock: 8, genre: 'snack', image: 'images/chocolate.jpg' },
+  ];
 
 // メインページのHTMLを返す（`views/index.html`が表示される）
 app.get('/', (req, res) => {

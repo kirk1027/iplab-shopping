@@ -15,6 +15,33 @@ body {
     width: 200px; /* 商品の幅を固定 */
     text-align: center; /* 中央揃えに設定 */
 }
+
+.horizontal-scroll {
+    display: flex; /* 横並びに表示 */
+    overflow-x: auto; /* 横スクロールを有効化 */
+    gap: 20px; /* 商品間の間隔 */
+    padding: 10px; /* 内側の余白 */
+    white-space: nowrap; /* 折り返しを防ぐ */
+}
+  
+.product {
+    flex: 0 0 200px; /* 商品の幅を固定 */
+    text-align: center; /* 中央揃え */
+}
+  
+.horizontal-scroll::-webkit-scrollbar {
+    height: 8px; /* スクロールバーの高さ */
+}
+  
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    background: #ddd; /* スクロールバーの色 */
+    border-radius: 4px; /* スクロールバーを丸く */
+}
+  
+.horizontal-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1; /* スクロールバーのトラック部分の色 */
+}
+  
   
 .hidden {
     display: none; /* 非表示状態を設定 */
