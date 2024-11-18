@@ -3,36 +3,51 @@ let cart = [];
 
 // 商品データを取得して画面に表示
 async function fetchProducts() {
-  const res = await fetch('/api/products'); // サーバーから商品データを取得
-  const products = await res.json(); // JSON形式でデータを取得
+    const res = await fetch('/api/products'); // サーバーから商品データを取得
+    const products = await res.json(); // JSON形式でデータを取得
+  
+    // 商品データを在庫がある商品とない商品に分ける
+    const availableProducts = products.filter(product => product.stock > 0); // 在庫がある商品
+    const unavailableProducts = products.filter(product => product.stock === 0); // 在庫がない商品
+  
+    const drinkList = document.getElementById('drink-list'); // ドリンクリストの表示エリア
+    const snackList = document.getElementById('snack-list'); // スナックリストの表示エリア
+  
+    drinkList.innerHTML = ''; // ドリンクリストをリセット
+    snackList.innerHTML = ''; // スナックリストをリセット
+  
+    // 在庫がある商品を先に表示
+    const sortedProducts = [...availableProducts, ...unavailableProducts]; // 在庫がある商品を前に結合
+  
+    // 商品ごとにHTML要素を作成
+    sortedProducts.forEach(product => {
+      const productDiv = document.createElement('div');
+      productDiv.className = 'product';
+      productDiv.style.backgroundColor = product.stock === 0 ? '#f0f0f0' : 'white'; // 在庫がない商品の背景色を暗くする
+  
+      productDiv.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" width="100%"> <!-- 商品画像 -->
+        <h3>${product.name}</h3> <!-- 商品名 -->
+        <p>Price: ¥${product.price}</p> <!-- 価格 -->
+        <p>Stock: ${product.stock}</p> <!-- 在庫 -->
+        <select id="quantity-${product.id}" ${product.stock === 0 ? 'disabled' : ''}> <!-- 購入数を選択するプルダウン -->
+          ${[...Array(product.stock).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+        </select>
+        <!-- カートに入れるボタン -->
+        <button 
+          onclick="addToCart(${product.id}, '${product.name}', ${product.price})" 
+          ${product.stock === 0 ? 'disabled style="background-color: #ccc; cursor: not-allowed;"' : ''}>
+          カートに入れる
+        </button>
+      `;
 
-  const drinkList = document.getElementById('drink-list'); // ドリンクリストの表示エリア
-  const snackList = document.getElementById('snack-list'); // スナックリストの表示エリア
-
-  drinkList.innerHTML = ''; // ドリンクリストをリセット
-  snackList.innerHTML = ''; // スナックリストをリセット
-
-  // 商品ごとにHTML要素を作成
-  products.forEach(product => {
-    const productDiv = document.createElement('div');
-    productDiv.className = 'product';
-    productDiv.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" width="100%"> <!-- 商品画像 -->
-      <h3>${product.name}</h3> <!-- 商品名 -->
-      <p>Price: ¥${product.price}</p> <!-- 価格 -->
-      <p>Stock: ${product.stock}</p> <!-- 在庫 -->
-      <select id="quantity-${product.id}"> <!-- 購入数を選択するプルダウン -->
-        ${[...Array(product.stock).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join('')}
-      </select>
-      <button onclick="addToCart(${product.id}, '${product.name}', ${product.price})">カートに入れる</button> <!-- カートに入れるボタン -->
-    `;
-    // ジャンルごとにリストに追加
-    if (product.genre === 'drink') {
-        drinkList.appendChild(productDiv);
-    } else if (product.genre === 'snack') {
-        snackList.appendChild(productDiv);
-    }
-  });
+      // ジャンルごとにリストに追加
+      if (product.genre === 'drink') {
+          drinkList.appendChild(productDiv);
+      } else if (product.genre === 'snack') {
+          snackList.appendChild(productDiv);
+      }
+    });
 }
 
 // カートに商品を追加
