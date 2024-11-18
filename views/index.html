@@ -4,11 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/style.css">
-  <title>Shopping Site</title>
+  <title>IPLAB Shopping</title>
 </head>
 <body>
-  <div id="product-list"></div> <!-- 商品リストを表示するエリア -->
 
+  <div>
+    <h1>IPLAB Shopping</h1>
+  </div>
+
+  <!-- 売り上げデータへのリンク -->
+  <footer>
+    <a href="/sales">売り上げ状況</a>
+  </footer>
+  <div id="product-list"></div> <!-- 商品リストを表示するエリア -->
   <div>
     <h2>Drinks</h2>
     <div class="horizontal-scroll" id="drink-list"></div> <!-- ドリンクリスト -->
@@ -28,11 +36,6 @@
 
   <!-- 常に表示される精算ボタン -->
   <button id="fixed-checkout-button">精算</button>
-
-  <!-- 売り上げデータへのリンク -->
-  <footer>
-    <a href="/sales">売り上げ状況</a>
-  </footer>
 
   <script src="/script.js"></script>
 </body>
