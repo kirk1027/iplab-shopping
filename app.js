@@ -80,7 +80,7 @@ app.get('/api/sales-data', (req, res) => {
   res.json({ totalSales, salesData });
 });
 
-// PORTの定義を最初に行う
+// PORTの定義
 const PORT = process.env.PORT || 3000;
 
 // サーバーを起動
