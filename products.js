@@ -2,7 +2,7 @@ const products = [
     { id: 1, name: '水', price: 50, stock: 10, genre: 'drink', image: 'images/water.jpg' },
     { id: 2, name: 'チルアウト', price: 170, stock: 0, genre: 'drink', image: 'images/chillout.jpg' },
     { id: 3, name: 'コーラ（PET）', price: 100, stock: 0, genre: 'drink', image: 'images/cola_pet.jpg' },
-    { id: 4, name: 'レッドブル（紫）', price: 100, stock: 10, genre: 'drink', image: 'images/redbull_purple.jpg' },
+    { id: 4, name: 'レッドブル（紫）', price: 100, stock: 11, genre: 'drink', image: 'images/redbull_purple.jpg' },
     { id: 5, name: 'レッドブル（黄）', price: 100, stock: 20, genre: 'drink', image: 'images/redbull_yellow.jpg' },
     { id: 6, name: 'カフェオレ', price: 100, stock: 0, genre: 'drink', image: 'images/cafe.jpg' },
     { id: 7, name: 'マッチ', price: 90, stock: 0, genre: 'drink', image: 'images/match.jpg' },

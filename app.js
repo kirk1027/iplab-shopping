@@ -31,6 +31,16 @@ app.post('/api/purchase', (req, res) => {
   }
 });
 
+// PayPay支払い完了ページ
+app.get('/paypay-success', (req, res) => {
+    res.send('<h1>PayPayでの支払いが完了しました！</h1><a href="/">購入ページに戻る</a>');
+});
+  
+// PayPay支払い失敗ページ
+app.get('/paypay-failure', (req, res) => {
+    res.send('<h1>PayPayでの支払いに失敗しました。</h1><a href="/">購入ページに戻る</a>');
+});  
+
 // 以下，売り上げ関連
 // 売り上げデータページのHTMLを返す
 app.get('/sales', (req, res) => {
