@@ -1,18 +1,18 @@
-addEventListener("fetch", event => {
-  event.respondWith();
-});
-
 // Google Apps Script APIのエンドポイント
 const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/macros/s/AKfycbySEJBai_l09TjkkEKtSlwvqGwT548BXioPPcsTk9qW9VzUxwbDupnNS4oPrEc_rGmbnQ/exec";
+
+addEventListener("fetch", event => {
+  event.respondWith(handleRequest(event.request));
+});
 
 async function handleRequest(request) {
   try {
     if (request.url.includes("/api/products")) {
-      const response = await fetch(GOOGLE_APPS_SCRIPT_API); // Google Apps Script APIにリクエスト
-      const data = await response.json(); // JSONデータを取得
-      return new Response(JSON.stringify(data), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return fetchProducts();
+    } else if (request.url.includes("/api/update-stock")) {
+      return updateStock(request);
+    } else if (request.url.includes("/api/sales-data")) {
+      return fetchSalesData();
     }
     return new Response("Not Found", { status: 404 });
   } catch (error) {
@@ -26,8 +26,9 @@ async function fetchProducts() {
   try {
     const response = await fetch(GOOGLE_APPS_SCRIPT_API); // Google Apps Script APIを呼び出す
     if (!response.ok) {
-      throw new Error(`Failed to fetch products: ${response.status}`);
-    }
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch products: ${response.status} - ${errorText}`);
+    }    
 
     const products = await response.json(); // 商品データを取得
     return new Response(JSON.stringify(products), {
@@ -53,7 +54,8 @@ async function updateStock(request) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to update stock: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to update stock: ${response.status} - ${errorText}`);
     }
 
     const result = await response.json(); // 更新結果を取得
@@ -71,15 +73,10 @@ async function updateStock(request) {
 
 
 // 売り上げデータを提供するAPI
-app.get('/api/sales-data', (req, res) => {
-  res.json({ totalSales, salesData });
-});
+if (request.url.includes("/api/sales-data")) {
+  const salesData = { totalSales, salesData};
+  return new Response(JSON.stringify(salesData), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
 
-// PORTの定義
-const PORT = process.env.PORT || 3000;
-
-// サーバーを起動
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Visit the application at http://localhost:${PORT} (or the Render-provided URL)`);
-});

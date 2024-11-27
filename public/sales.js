@@ -5,7 +5,7 @@ const expenses = 20000; // 後で修正する場合はここを変更
 async function fetchSalesData() {
   try {
     // 在庫データをGoogle Apps Scriptから取得
-    const inventoryRes = await fetch('https://script.google.com/a/macros/iplab.cs.tsukuba.ac.jp/s/AKfycbyY-dC--5YGPy7wg7R4A1r8RQnnCCjh6ATyfFnfBd3mbSjlonbztzRxLYRHMAoRo6RWZg/exec'); // URLをGoogle Apps ScriptのWebアプリURLに設定
+    const inventoryRes = await fetch('https://script.google.com/macros/s/AKfycbySEJBai_l09TjkkEKtSlwvqGwT548BXioPPcsTk9qW9VzUxwbDupnNS4oPrEc_rGmbnQ/exec'); // URLをGoogle Apps ScriptのWebアプリURLに設定
     const inventory = await inventoryRes.json();
     console.log(inventory); // デバッグ用: 在庫データを確認
 
