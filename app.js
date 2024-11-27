@@ -1,30 +1,24 @@
 addEventListener("fetch", event => {
-  event.respondWith(
-    new Response(JSON.stringify({ message: "API is working" }), {
-      headers: { "Content-Type": "application/json" },
-    })
-  );
+  event.respondWith();
 });
 
-
 // Google Apps Script APIのエンドポイント
-const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/a/macros/iplab.cs.tsukuba.ac.jp/s/AKfycbyY-dC--5YGPy7wg7R4A1r8RQnnCCjh6ATyfFnfBd3mbSjlonbztzRxLYRHMAoRo6RWZg/exec";
+const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/macros/s/AKfycbySEJBai_l09TjkkEKtSlwvqGwT548BXioPPcsTk9qW9VzUxwbDupnNS4oPrEc_rGmbnQ/exec";
 
 async function handleRequest(request) {
-  const url = new URL(request.url);
-
-  // 商品情報を取得するエンドポイント
-  if (url.pathname === "/api/products") {
-    return fetchProducts();
+  try {
+    if (request.url.includes("/api/products")) {
+      const response = await fetch(GOOGLE_APPS_SCRIPT_API); // Google Apps Script APIにリクエスト
+      const data = await response.json(); // JSONデータを取得
+      return new Response(JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    return new Response("Not Found", { status: 404 });
+  } catch (error) {
+    console.error("Workers error:", error);
+    return new Response("Internal Server Error", { status: 500 });
   }
-
-  // 在庫を更新するエンドポイント
-  if (url.pathname === "/api/update-stock" && request.method === "POST") {
-    return updateStock(request);
-  }
-
-  // 上記以外のリクエストは404エラーを返す
-  return new Response("Not Found", { status: 404 });
 }
 
 // 商品情報を取得する関数

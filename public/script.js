@@ -8,10 +8,15 @@ let cart = [];
 async function fetchProducts() {
   try {
     const res = await fetch(`${API_BASE_URL}/api/products`); // Cloudflare Workersのエンドポイントを呼び出す
-    if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
-    }
     const products = await res.json(); // 商品データを取得
+    const contentType = res.headers.get("Content-Type");
+
+    // レスポンスがJSON形式でない場合エラーをスロー
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text(); // HTMLエラーページの内容を取得
+      throw new Error(`Unexpected response format: ${text}`);
+    }
+
     console.log(products); // デバッグ用: 商品データを確認
 
     // 商品データを在庫がある商品とない商品に分ける
