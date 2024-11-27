@@ -16,7 +16,9 @@
   <footer>
     <a href="/sales">売り上げ状況</a>
   </footer>
-  <div id="product-list"></div> <!-- 商品リストを表示するエリア -->
+
+  <!-- 商品リストを表示するエリア -->
+  <div id="product-list"></div> 
   <div>
     <h2>Drinks</h2>
     <div class="horizontal-scroll" id="drink-list"></div> <!-- ドリンクリスト -->
@@ -27,16 +29,13 @@
   </div>  
 
   <!-- カートの内容を表示するポップアップ -->
-  <div class="purchase-popup hidden" id="popup">
+  <div class="purchase-popup" id="popup">
     <h3>カートの中身</h3>
     <ul id="cart-items"></ul> <!-- カート内の商品リスト -->
     <p id="total-price"></p> <!-- 合計金額を表示 -->
     <button id="cash-button">現金</button> <!-- 現金ボタン -->
     <button id="paypay-button">PayPay</button> <!-- PayPayボタン -->
   </div>
-
-  <!-- 常に表示される精算ボタン -->
-  <button id="fixed-checkout-button">精算</button>
 
   <script src="/script.js"></script>
 </body>

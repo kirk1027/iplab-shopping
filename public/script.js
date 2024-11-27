@@ -1,5 +1,5 @@
 // Google Apps Script のエンドポイントURL
-const API_URL = "https://script.google.com/macros/s/AKfycbzEI-bCMK7loJjFf_dWvkGC9aOYEKSgQ1JL3jzeq5q2_UodLE8q47OvYnfHQPESiE7P5w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzNMBBIPOo1ycU2hPXYYwwf2_oSumRKxX3M5z3VAM1jPM91Z2dj0KSZDH8h-LfwiIsQeQ/exec";
 
 // カート情報を保持する配列
 let cart = [];
@@ -98,5 +98,55 @@ function updateCartPopup() {
   totalPriceElement.textContent = `合計金額: ¥${totalPrice}`;
 }
 
+<<<<<<< HEAD
+// 現金ボタンの処理
+async function processPayment() {
+  if (cart.length === 0) {
+    alert("カートが空です！");
+    return;
+  }
+
+  try {
+    let cartTotal = 0;
+    const soldItems = cart.map(item => {
+      const totalPrice = item.price * item.quantity;
+      cartTotal += totalPrice;
+  
+      // 商品在庫を減少
+      const product = products.find(p => p["商品 ID"] === item.id);
+      if (product) {
+        product.在庫 -= item.quantity; // 在庫減少
+      }
+  
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        totalPrice: totalPrice
+      };
+    });
+  
+    // 在庫データを更新
+    const stockUpdateResponse = await fetch(`${API_URL}/update-stock`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ products })
+    });
+  
+    if (!stockUpdateResponse.ok) {
+      throw new Error(`Failed to update stock: ${stockUpdateResponse.status}`);
+    }
+  } catch (error) {
+    console.error("Error updating stock:", error);
+    alert("在庫更新中にエラーが発生しました。");
+  }  
+}
+
+
+
 // 初期化処理
 fetchProducts(); // 商品データを取得して表示
+document.getElementById("cash-button").addEventListener("click", processPayment);
+=======
+// 初期化処理
+fetchProducts(); // 商品データを取得して表示
+>>>>>>> parent of 172e70f (精算ボタン)

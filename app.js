@@ -1,5 +1,5 @@
 // Google Apps Script APIのエンドポイント
-const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/macros/s/AKfycbySEJBai_l09TjkkEKtSlwvqGwT548BXioPPcsTk9qW9VzUxwbDupnNS4oPrEc_rGmbnQ/exec";
+const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/macros/s/AKfycbzNMBBIPOo1ycU2hPXYYwwf2_oSumRKxX3M5z3VAM1jPM91Z2dj0KSZDH8h-LfwiIsQeQ/exec";
 
 addEventListener("fetch", event => {
   event.respondWith(handleRequest(event.request));
