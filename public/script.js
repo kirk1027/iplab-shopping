@@ -1,5 +1,5 @@
 // Cloudflare WorkersのAPI URL（必ず正しいURLに置き換えてください）
-const API_BASE_URL = "https://your-cloudflare-workers-app.workers.dev";
+const API_BASE_URL = "https://5d4712d8.iplab-shopping.pages.dev";
 
 // カート情報を保持する配列
 let cart = [];
