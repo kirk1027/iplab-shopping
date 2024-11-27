@@ -129,7 +129,7 @@ document.getElementById('cash-button').addEventListener('click', () => {
 
 // PayPayボタンの処理
 document.getElementById('paypay-button').addEventListener('click', () => {
-    // PayPayの支払いリンク（仮のリンクを設定）
+    // PayPayの支払いリンku
     const PAYPAY_PAYMENT_URL = 'https://qr.paypay.ne.jp/p2p01_E0Pid4VMI15bZklp';
 
     if (cart.length === 0) {
