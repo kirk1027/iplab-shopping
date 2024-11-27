@@ -48,17 +48,14 @@ body {
 }
   
 .purchase-popup {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 300px;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
+    position: fixed; /* ポップアップを画面に固定 */
+    bottom: 80px; /* 画面下部からの距離 */
+    right: 20px; /* 画面右からの距離 */
+    background: white; /* 背景色を白に設定 */
+    border: 1px solid #ddd; /* 枠線を設定 */
+    padding: 10px; /* 内側の余白 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ポップアップに影を追加 */
+}
   
 #fixed-checkout-button {
     position: fixed; /* 常に画面右下に表示 */
