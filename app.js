@@ -1,79 +1,75 @@
-const express = require('express'); // Expressを使ってサーバーを作成
-const bodyParser = require('body-parser'); // JSONデータを処理するためのモジュール
-const products = require('./products'); // 商品データをインポート
-
-const app = express(); // Expressアプリケーションを作成
-app.use(express.static('public')); // 静的ファイル（HTML, CSS, JSなど）を`public`フォルダから提供
-app.use(bodyParser.json()); // JSON形式のリクエストボディを解析
-
-// メインページのHTMLを返す（`views/index.html`が表示される）
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+addEventListener("fetch", event => {
+  event.respondWith(handleRequest(event.request));
 });
 
-// 商品情報をフロントエンドに提供するAPI
-app.get('/api/products', (req, res) => {
-  res.json(products); // 商品データをJSON形式で返す
-});
+// Google Apps Script APIのエンドポイント
+const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/a/macros/iplab.cs.tsukuba.ac.jp/s/AKfycbyY-dC--5YGPy7wg7R4A1r8RQnnCCjh6ATyfFnfBd3mbSjlonbztzRxLYRHMAoRo6RWZg/exec";
 
-// 商品購入時に在庫を更新するAPI
-app.post('/api/purchase', (req, res) => {
-  const { id, quantity } = req.body; // リクエストから商品IDと購入数量を取得
-  const product = products.find(p => p.id === id); // 該当する商品を検索
+async function handleRequest(request) {
+  const url = new URL(request.url);
 
-  if (product && product.stock >= quantity) {
-    // 在庫が十分ある場合は在庫を減らす
-    product.stock -= quantity;
-    res.json({ success: true, message: 'Purchase successful!', product });
-  } else {
-    // 在庫が足りない場合はエラーメッセージを返す
-    res.json({ success: false, message: 'Not enough stock!' });
+  // 商品情報を取得するエンドポイント
+  if (url.pathname === "/api/products") {
+    return fetchProducts();
   }
-});
 
-// PayPay支払い完了ページ
-app.get('/paypay-success', (req, res) => {
-    res.send('<h1>PayPayでの支払いが完了しました！</h1><a href="/">購入ページに戻る</a>');
-});
-  
-// PayPay支払い失敗ページ
-app.get('/paypay-failure', (req, res) => {
-    res.send('<h1>PayPayでの支払いに失敗しました。</h1><a href="/">購入ページに戻る</a>');
-});  
+  // 在庫を更新するエンドポイント
+  if (url.pathname === "/api/update-stock" && request.method === "POST") {
+    return updateStock(request);
+  }
 
-// 以下，売り上げ関連
-// 売り上げデータページのHTMLを返す
-app.get('/sales', (req, res) => {
-    res.sendFile(__dirname + '/views/sales.html');
-});
+  // 上記以外のリクエストは404エラーを返す
+  return new Response("Not Found", { status: 404 });
+}
 
-// 売り上げデータを保存する配列
-let salesData = [];
-let totalSales = 0; // 売り上げの合計金額
-
-// 売り上げを記録するAPI
-app.post('/api/record-sale', (req, res) => {
-  const { name, quantity, price } = req.body;
-  const saleAmount = price * quantity;
-
-  // 売り上げを保存
-  salesData.push({ name, quantity, price });
-  totalSales += saleAmount;
-
-  // 在庫を更新
-  const product = products.find(p => p.name === name); // 名前で商品を検索
-  if (product) {
-    if (product.stock >= quantity) {
-      product.stock -= quantity; // 在庫を減らす
-    } else {
-      return res.status(400).json({ success: false, message: '在庫が足りません！' });
+// 商品情報を取得する関数
+async function fetchProducts() {
+  try {
+    const response = await fetch(GOOGLE_APPS_SCRIPT_API); // Google Apps Script APIを呼び出す
+    if (!response.ok) {
+      throw new Error(`Failed to fetch products: ${response.status}`);
     }
-  } else {
-    return res.status(404).json({ success: false, message: '商品が見つかりません！' });
-  }
 
-  res.json({ success: true, totalSales });
-});
+    const products = await response.json(); // 商品データを取得
+    return new Response(JSON.stringify(products), {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: "Failed to fetch products" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
+// 在庫を更新する関数
+async function updateStock(request) {
+  try {
+    const body = await request.json(); // リクエストボディを解析
+    const response = await fetch(GOOGLE_APPS_SCRIPT_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body), // 在庫更新データをGoogle Apps Script APIに送信
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update stock: ${response.status}`);
+    }
+
+    const result = await response.json(); // 更新結果を取得
+    return new Response(JSON.stringify(result), {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: "Failed to update stock" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
 
 // 売り上げデータを提供するAPI
 app.get('/api/sales-data', (req, res) => {

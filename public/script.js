@@ -1,30 +1,35 @@
+// Cloudflare WorkersのAPI URL（必ず正しいURLに置き換えてください）
+const API_BASE_URL = "https://your-cloudflare-workers-app.workers.dev";
+
 // カート情報を保持する配列
 let cart = [];
 
 // 商品データを取得して画面に表示
 async function fetchProducts() {
-    const res = await fetch('/api/products'); // サーバーから商品データを取得
-    const products = await res.json(); // JSON形式でデータを取得
-  
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/products`); // Cloudflare Workersのエンドポイントを呼び出す
+    const products = await res.json(); // 商品データを取得
+    console.log(products); // デバッグ用: 商品データを確認
+
     // 商品データを在庫がある商品とない商品に分ける
     const availableProducts = products.filter(product => product.stock > 0); // 在庫がある商品
     const unavailableProducts = products.filter(product => product.stock === 0); // 在庫がない商品
-  
+
     const drinkList = document.getElementById('drink-list'); // ドリンクリストの表示エリア
     const snackList = document.getElementById('snack-list'); // スナックリストの表示エリア
-  
+
     drinkList.innerHTML = ''; // ドリンクリストをリセット
     snackList.innerHTML = ''; // スナックリストをリセット
-  
+
     // 在庫がある商品を先に表示
     const sortedProducts = [...availableProducts, ...unavailableProducts]; // 在庫がある商品を前に結合
-  
+
     // 商品ごとにHTML要素を作成
     sortedProducts.forEach(product => {
       const productDiv = document.createElement('div');
       productDiv.className = 'product';
       productDiv.style.backgroundColor = product.stock === 0 ? '#f0f0f0' : 'white'; // 在庫がない商品の背景色を暗くする
-  
+
       productDiv.innerHTML = `
         <img src="${product.image}" alt="${product.name}" width="100%"> <!-- 商品画像 -->
         <h3>${product.name}</h3> <!-- 商品名 -->
@@ -43,11 +48,15 @@ async function fetchProducts() {
 
       // ジャンルごとにリストに追加
       if (product.genre === 'drink') {
-          drinkList.appendChild(productDiv);
+        drinkList.appendChild(productDiv);
       } else if (product.genre === 'snack') {
-          snackList.appendChild(productDiv);
+        snackList.appendChild(productDiv);
       }
     });
+  } catch (error) {
+    console.error(error);
+    alert('商品データの取得に失敗しました。');
+  }
 }
 
 // カートに商品を追加
@@ -88,83 +97,38 @@ function updateCartPopup() {
   totalPriceElement.textContent = `合計金額: ¥${totalPrice}`;
 }
 
-// 常に表示される精算ボタンの処理
-document.getElementById('fixed-checkout-button').addEventListener('click', () => {
-    const popup = document.getElementById('popup');
-    if (cart.length === 0) {
-      alert('カートが空です！');
-      return;
-    }
-  
-    updateCartPopup(); // ポップアップの内容を更新
-    popup.classList.remove('hidden'); // ポップアップを表示
-});
-  
-// ポップアップ内の精算ボタンの処理
-document.getElementById('cash-button').addEventListener('click', () => {
-    if (cart.length === 0) {
-      alert('カートが空です！');
-      return;
+// カートを精算
+async function checkout() {
+  if (cart.length === 0) {
+    alert('カートが空です！');
+    return;
+  }
+
+  try {
+    // カート内の商品をCloudflare WorkersのAPIに送信
+    for (const item of cart) {
+      const res = await fetch(`${API_BASE_URL}/api/update-stock`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId: item.id, quantity: item.quantity }),
+      });
+      const result = await res.json();
+      if (!result.success) {
+        alert(`エラー: ${result.message}`);
+        return;
+      }
     }
 
-    // サーバーに売り上げデータを送信
-    cart.forEach(item => {
-      fetch('/api/record-sale', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: item.name, quantity: item.quantity, price: item.price })
-      }).then(res => {
-        if (!res.ok) {
-          return res.json().then(data => alert(data.message || 'エラーが発生しました'));
-        }
-      }).catch(err => alert('エラーが発生しました: ' + err.message));
-    });
-  
     alert('精算が完了しました！');
     cart = []; // カートを空にする
     updateCartPopup(); // ポップアップをリセット
-    document.getElementById('popup').classList.add('hidden'); // ポップアップを閉じる
-    fetchProducts();
-});
+    fetchProducts(); // 商品データを再取得して更新
+  } catch (error) {
+    console.error(error);
+    alert('精算中にエラーが発生しました。');
+  }
+}
 
-// PayPayボタンの処理
-document.getElementById('paypay-button').addEventListener('click', () => {
-    // PayPayの支払いリンku
-    const PAYPAY_PAYMENT_URL = 'https://qr.paypay.ne.jp/p2p01_E0Pid4VMI15bZklp';
-
-    if (cart.length === 0) {
-      alert('カートが空です！');
-      return;
-    }
-  
-    // サーバーに売り上げデータを送信（支払い後の更新用）
-    const updateStockAndSales = () => {
-      cart.forEach(item => {
-        fetch('/api/record-sale', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: item.name, quantity: item.quantity, price: item.price })
-        })
-          .then(res => {
-            if (!res.ok) {
-              return res.json().then(data => alert(data.message || 'エラーが発生しました'));
-            }
-          })
-          .catch(err => alert('エラーが発生しました: ' + err.message));
-      });
-  
-      alert('精算が完了しました！');
-      cart = []; // カートを空にする
-      updateCartPopup(); // ポップアップをリセット
-      document.getElementById('popup').classList.add('hidden'); // ポップアップを閉じる
-      fetchProducts(); // 商品データを更新
-    };
-  
-    // 支払いリンクにリダイレクト
-    window.location.href = `${PAYPAY_PAYMENT_URL}?redirect_success=/&redirect_fail=/paypay-failure`;
-    // 支払い後の更新処理を呼び出す
-    updateStockAndSales();
-});
-  
-// 初回実行時に商品データを取得して表示
+// 初期化処理
 fetchProducts();
+document.getElementById('fixed-checkout-button').addEventListener('click', checkout);
