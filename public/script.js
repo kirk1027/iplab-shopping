@@ -8,6 +8,9 @@ let cart = [];
 async function fetchProducts() {
   try {
     const res = await fetch(`${API_BASE_URL}/api/products`); // Cloudflare Workersのエンドポイントを呼び出す
+    if (!res.ok) {
+      throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+    }
     const products = await res.json(); // 商品データを取得
     console.log(products); // デバッグ用: 商品データを確認
 
@@ -54,7 +57,7 @@ async function fetchProducts() {
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Fetch error:', error);
     alert('商品データの取得に失敗しました。');
   }
 }

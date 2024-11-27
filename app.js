@@ -1,6 +1,11 @@
 addEventListener("fetch", event => {
-  event.respondWith(handleRequest(event.request));
+  event.respondWith(
+    new Response(JSON.stringify({ message: "API is working" }), {
+      headers: { "Content-Type": "application/json" },
+    })
+  );
 });
+
 
 // Google Apps Script APIのエンドポイント
 const GOOGLE_APPS_SCRIPT_API = "https://script.google.com/a/macros/iplab.cs.tsukuba.ac.jp/s/AKfycbyY-dC--5YGPy7wg7R4A1r8RQnnCCjh6ATyfFnfBd3mbSjlonbztzRxLYRHMAoRo6RWZg/exec";
